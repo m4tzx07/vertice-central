@@ -1,23 +1,14 @@
-import { createFileRoute } from "@tanstack/react-router";
-
-// The home route ships no og:image, so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
-export const Route = createFileRoute("/")({
-  component: Index,
-});
-
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
+import { site } from "@/config/site";
+import { products } from "@/data/products";
+import { ProductCard, BrandMark } from "@/components/storefront";
+export const Route = createFileRoute("/")({ component: Home, head:()=>({meta:[{title:"VÉRTICE — Vista sua própria direção",name:"description",content:site.description},{property:"og:title",content:"VÉRTICE — Vista sua própria direção"},{property:"og:description",content:site.description}]})});
+function Home(){
+ const featured=products.slice(0,4);
+ return <main><section className="hero"><img className="hero-image" src={site.heroImage} alt="Modelo usando peças de moda masculina em cenário urbano"/><div className="hero-shade"/><div className="hero-content"><p className="mono eyebrow"><BrandMark/> COLEÇÃO ATUAL</p><h1>Vista sua própria<br/><em>direção.</em></h1><Link to="/colecao" className="button button-light hero-button">Explorar a coleção <ArrowRight size={17}/></Link></div><div className="hero-index mono">01 / 04 <span/></div></section>
+ <div className="marquee"><div className="marquee-track mono">CAMISETAS — CALÇAS — JAQUETAS — MOLETONS — ACESSÓRIOS — CAMISETAS — CALÇAS — JAQUETAS — MOLETONS — ACESSÓRIOS —</div></div>
+ <section className="section featured-section"><div className="section-heading"><div><p className="mono eyebrow"><BrandMark/> SELEÇÃO</p><h2>Peças que <em>definem</em><br/>o resto.</h2></div><Link to="/colecao" className="text-link">Ver coleção completa <ArrowRight size={15}/></Link></div><div className="featured-grid">{featured.map((p,i)=><div className={i%2===1?"offset-card":""} key={p.id}><ProductCard product={p}/></div>)}</div></section>
+ <section className="brand-section"><div className="brand-photo"><img src={site.brandImage} alt="Detalhe de tecido e acabamento de uma peça VÉRTICE" loading="lazy"/></div><div className="brand-copy"><p className="mono eyebrow"><BrandMark/> A MARCA</p><h2>Onde as linhas<br/>se encontram.</h2><p className="brand-description">VÉRTICE é o ponto em que duas linhas se cruzam e um caminho passa a existir. Fazemos roupas para quem já sabe para onde está indo: cortes limpos, tecidos escolhidos com critério e peças que funcionam do dia à noite. Sem excesso, sem pressa de ser notada.</p><div className="principles">{[{n:"01",t:"Corte",d:"Modelagens pensadas para o corpo, não para a tendência."},{n:"02",t:"Tecido",d:"Algodão pesado, sarja firme, malha que não perde a forma."},{n:"03",t:"Uso",d:"Peças que se repetem bem, combinam entre si e duram."}].map(x=><div className="principle" key={x.n}><span className="mono muted">{x.n}</span><div><h3>{x.t}</h3><p>{x.d}</p></div></div>)}</div></div></section>
+ <section className="closing-cta" style={{backgroundImage:`linear-gradient(90deg,rgba(11,11,12,.82),rgba(11,11,12,.18)),url(${site.closingImage})`}}><div><p className="mono eyebrow"><BrandMark/> VÉRTICE / 2026</p><h2>Escolha por onde<br/><em>começar.</em></h2><Link to="/colecao" className="button button-light">Ver coleção <ArrowRight size={16}/></Link></div></section></main>;
 }
